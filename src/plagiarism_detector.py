@@ -1110,3 +1110,101 @@ print("Similarity Category:", category)
 print("Final Result:", plagiarism)
 
 print("=" * 80)
+
+# -----------------------------------------
+# GRAPH 3: WORD COUNT BEFORE AND AFTER
+# PREPROCESSING
+# -----------------------------------------
+
+before_after = pd.DataFrame({
+    "Text 1": [
+        df["text1_word_count"].mean(),
+        df["clean_text1_word_count"].mean()
+    ],
+    "Text 2": [
+        df["text2_word_count"].mean(),
+        df["clean_text2_word_count"].mean()
+    ]
+}, index=[
+    "Before Preprocessing",
+    "After Preprocessing"
+])
+
+before_after.plot(
+    kind="bar",
+    figsize=(9, 5)
+)
+
+plt.title("Average Word Count Before and After Preprocessing")
+plt.xlabel("Processing Stage")
+plt.ylabel("Average Number of Words")
+
+plt.xticks(rotation=0)
+
+plt.tight_layout()
+
+plt.savefig(
+    "results/word_count_before_after.png",
+    dpi=300
+)
+
+plt.show()
+
+
+# -----------------------------------------
+# GRAPH 4: TOP 10 MOST SIMILAR TEXT PAIRS
+# -----------------------------------------
+
+top_10_scores = top_pairs.sort_values(
+    by="similarity_score",
+    ascending=True
+)
+
+plt.figure(figsize=(10, 6))
+
+plt.barh(
+    top_10_scores["Unique_ID"].astype(str),
+    top_10_scores["similarity_score"]
+)
+
+plt.title("Top 10 Most Similar Text Pairs")
+plt.xlabel("Cosine Similarity Score")
+plt.ylabel("Unique ID")
+
+plt.xlim(0, 1)
+
+plt.tight_layout()
+
+plt.savefig(
+    "results/top_10_similarity_pairs.png",
+    dpi=300
+)
+
+plt.show()
+
+# -----------------------------------------
+# GRAPH 5: TOP 10 TF-IDF WORDS
+# -----------------------------------------
+
+top_words = tfidf_scores.head(10)
+
+plt.figure(figsize=(10, 6))
+
+plt.barh(
+    top_words["word"][::-1],
+    top_words["tfidf_score"][::-1]
+)
+
+plt.title("Top 10 TF-IDF Words in the First Document")
+plt.xlabel("TF-IDF Score")
+plt.ylabel("Word")
+
+plt.tight_layout()
+
+plt.savefig(
+    "results/top_tfidf_words.png",
+    dpi=300
+)
+
+plt.show()
+
